@@ -23,7 +23,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-
+    private Marker marcador;
+    double dLat = 0.0, dLng = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +36,68 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
+    LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
+    private void agregarMarcador(double dLat, double dLng) {
+        LatLng coordenadas = new LatLng(dLat, dLng);
+        CameraUpdate miUbicacion = CameraUpdateFactory.newLatLngZoom(coordenadas, 0);
+        if (marcador != null) marcador.remove();
+        marcador = mMap.addMarker(new MarkerOptions()
+                        .position(coordenadas)
+                        .title("15325061080104,Villanueva Rubio Jesús Emmanuel")
+                //.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher))
+        );
+        mMap.animateCamera(miUbicacion);
+    }
+
+    private void actualizaUbicacion(Location localizacion) {
+        if (localizacion != null) {
+            dLat = localizacion.getLatitude();
+            dLng = localizacion.getLongitude();
+            agregarMarcador(dLat, dLng);
+        }
+    }
+
+
+    private void miUbicacion() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Location localizacion = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        actualizaUbicacion(localizacion);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 15000, 0, locationListener);
+    }
 
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng sydney = new LatLng(25.585919,-108.463950 );
-        mMap.addMarker(new MarkerOptions().position(sydney).title(" 15325061080104 Villanueva Rubio Jesús Emmanuel"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        miUbicacion();
+
     }
 }
