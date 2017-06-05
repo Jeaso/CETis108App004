@@ -65,7 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         marcador = mMap.addMarker(new MarkerOptions()
                         .position(coordenadas)
                         .title("15325061080104,Villanueva Rubio Jesús Emmanuel")
-                //.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher))
+
         );
         mMap.animateCamera(miUbicacion);
     }
