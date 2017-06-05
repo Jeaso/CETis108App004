@@ -64,7 +64,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (marcador != null) marcador.remove();
         marcador = mMap.addMarker(new MarkerOptions()
                         .position(coordenadas)
-                        .title("15325061080104,Villanueva Rubio Jesús Emmanuel")
+                        .title("15325061080104,Villanueva Rubio Jesús Emmanuel.")
 
         );
         mMap.animateCamera(miUbicacion);
